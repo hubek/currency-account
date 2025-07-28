@@ -1,4 +1,7 @@
-package net.hubek.nn.currencyaccount;
+package net.hubek.nn.currencyaccount.repository;
+
+import net.hubek.nn.currencyaccount.Account;
+import net.hubek.nn.currencyaccount.CurrencyCode;
 
 public class AccountEntityMapper {
 

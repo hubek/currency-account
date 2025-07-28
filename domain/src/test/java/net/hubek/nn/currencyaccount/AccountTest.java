@@ -1,5 +1,7 @@
 package net.hubek.nn.currencyaccount;
 
+import net.hubek.nn.currencyaccount.exception.AccountCreationException;
+import net.hubek.nn.currencyaccount.exception.CurrencyExchangeException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -20,11 +22,12 @@ class AccountTest {
         BigDecimal exchangeRate = new BigDecimal("2.00");
 
         // when
-        account.exchange(amount, PLN, USD, exchangeRate);
+        BigDecimal exchangedAmount = account.exchange(amount, PLN, USD, exchangeRate);
 
         // then
         assertEquals(new BigDecimal("80.00"), account.getBalance(PLN));
         assertEquals(new BigDecimal("90.00"), account.getBalance(USD));
+        assertEquals(new BigDecimal("40.00"), exchangedAmount);
     }
 
     @Test

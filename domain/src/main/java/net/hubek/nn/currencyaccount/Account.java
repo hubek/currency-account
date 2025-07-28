@@ -1,8 +1,9 @@
 package net.hubek.nn.currencyaccount;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NonNull;
+import lombok.Value;
+import net.hubek.nn.currencyaccount.exception.AccountCreationException;
+import net.hubek.nn.currencyaccount.exception.CurrencyExchangeException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -11,13 +12,12 @@ import java.util.HashMap;
 import static net.hubek.nn.currencyaccount.CurrencyCode.PLN;
 import static net.hubek.nn.currencyaccount.CurrencyCode.USD;
 
-@Getter
-@AllArgsConstructor
-class Account {
-    private final String id;
-    private final String firstName;
-    private final String lastName;
-    private final HashMap<CurrencyCode, BigDecimal> balances;
+@Value
+public class Account {
+    String id;
+    String firstName;
+    String lastName;
+    HashMap<CurrencyCode, BigDecimal> balances;
 
     public Account(@NonNull String id, @NonNull String firstName, @NonNull String lastName, @NonNull BigDecimal plnBalance, @NonNull BigDecimal usdBalance) {
         validateNotNegativeAmount(plnBalance, PLN);
@@ -32,14 +32,18 @@ class Account {
         this.balances.put(USD, usdBalance.setScale(2, RoundingMode.HALF_UP));
     }
 
-    public void exchange(BigDecimal amount, CurrencyCode fromCurrency, CurrencyCode toCurrency, BigDecimal exchangeRate) {
+    public BigDecimal exchange(BigDecimal amount, CurrencyCode fromCurrency, CurrencyCode toCurrency, BigDecimal exchangeRate) {
         validateCorrectCurrencyCodes(fromCurrency, toCurrency);
 
         BigDecimal fromCurrencyBalance = balances.get(fromCurrency);
         validateSufficientBalance(fromCurrencyBalance, amount);
 
         balances.put(fromCurrency, fromCurrencyBalance.subtract(amount).setScale(2, RoundingMode.HALF_UP));
-        balances.put(toCurrency, balances.get(toCurrency).add(amount.multiply(exchangeRate)).setScale(2, RoundingMode.HALF_UP));
+
+        BigDecimal exchangedAmount = amount.multiply(exchangeRate).setScale(2, RoundingMode.HALF_UP);
+        balances.put(toCurrency, balances.get(toCurrency).add(exchangedAmount).setScale(2, RoundingMode.HALF_UP));
+
+        return exchangedAmount;
     }
 
     public BigDecimal getBalance(CurrencyCode currencyCode) {

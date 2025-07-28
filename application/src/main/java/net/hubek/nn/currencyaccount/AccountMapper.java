@@ -8,8 +8,8 @@ public class AccountMapper {
                 .id(account.getId())
                 .firstName(account.getFirstName())
                 .lastName(account.getLastName())
-                .plnBalance(account.getBalance(CurrencyCode.PLN).longValue())
-                .usdBalance(account.getBalance(CurrencyCode.USD).longValue())
+                .plnBalance(account.getBalance(CurrencyCode.PLN))
+                .usdBalance(account.getBalance(CurrencyCode.USD))
                 .build();
     }
 

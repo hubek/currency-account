@@ -1,6 +1,11 @@
 package net.hubek.nn.configuration;
 
 import net.hubek.nn.currencyaccount.*;
+import net.hubek.nn.currencyaccount.exchangerate.NbpApiRestClient;
+import net.hubek.nn.currencyaccount.exchangerate.NbpExchangeRateProvider;
+import net.hubek.nn.currencyaccount.repository.AccountEntityMapper;
+import net.hubek.nn.currencyaccount.repository.JpaAccountRepository;
+import net.hubek.nn.currencyaccount.repository.PostgresAccountRepositoryAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,8 +28,8 @@ public class CurrencyAccountConfiguration {
     }
 
     @Bean
-    public ExchangeRateProvider exchangeRateProvider() {
-        return new NbpExchangeRateProvider();
+    public ExchangeRateProvider exchangeRateProvider(NbpApiRestClient nbpApiRestClient) {
+        return new NbpExchangeRateProvider(nbpApiRestClient);
     }
 
     @Bean

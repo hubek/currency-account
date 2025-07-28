@@ -1,7 +1,6 @@
 package net.hubek.nn.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import net.hubek.nn.controller.request.CreateAccountRequest;
 import net.hubek.nn.controller.request.ExchangeCurrencyRequest;
 import net.hubek.nn.controller.response.AccountResponse;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import static net.hubek.nn.currencyaccount.AccountMapper.toAccountResponse;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/accounts")
 @RequiredArgsConstructor
@@ -22,7 +20,12 @@ public class AccountController {
     private final ExchangeCurrencyUseCase exchangeCurrencyService;
 
     @PostMapping
-    public ResponseEntity<AccountResponse> createAccount(@RequestBody CreateAccountRequest accountRequest) {
+    public ResponseEntity<AccountResponse> createAccount(@RequestHeader("Idempotency-Key") String idempotencyKey, @RequestBody CreateAccountRequest accountRequest) {
+//        if (idempotencyKeyStore.contains(idempotencyKey)) {
+//            // obsluga idempotencyjnosci, najlepiej jakims aspectem
+//            // return
+//        }
+
         AccountResponse accountResponse = toAccountResponse(accountCreationService.createAccount(accountRequest.firstName(), accountRequest.lastName(), accountRequest.plnBalance()));
         return ResponseEntity.ok(accountResponse);
     }
@@ -33,7 +36,11 @@ public class AccountController {
     }
 
     @PostMapping("/{id}/exchange")
-    public ResponseEntity<Void> exchange(@PathVariable String id, @RequestBody ExchangeCurrencyRequest exchangeRequest) {
+    public ResponseEntity<Void> exchange(@RequestHeader("Idempotency-Key") String idempotencyKey, @PathVariable String id, @RequestBody ExchangeCurrencyRequest exchangeRequest) {
+//        if (idempotencyKeyStore.contains(idempotencyKey)) {
+//            // obsluga idempotencyjnosci, najlepiej jakims aspectem
+//            // return
+//        }
         exchangeCurrencyService.exchange(id, exchangeRequest.amount(), exchangeRequest.fromCurrency(), exchangeRequest.toCurrency());
         return ResponseEntity.ok().build();
     }

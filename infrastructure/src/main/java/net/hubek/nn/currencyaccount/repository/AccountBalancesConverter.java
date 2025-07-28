@@ -1,9 +1,10 @@
-package net.hubek.nn.currencyaccount;
+package net.hubek.nn.currencyaccount.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import net.hubek.nn.currencyaccount.CurrencyCode;
 
 import java.io.IOException;
 import java.math.BigDecimal;

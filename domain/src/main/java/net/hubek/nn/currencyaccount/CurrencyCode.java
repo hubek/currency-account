@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-enum CurrencyCode {
+public enum CurrencyCode {
     PLN("PLN"),
     USD("USD"),
     EUR("EUR");

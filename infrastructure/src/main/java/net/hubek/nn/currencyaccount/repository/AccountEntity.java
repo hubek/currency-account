@@ -1,9 +1,13 @@
-package net.hubek.nn.currencyaccount;
+package net.hubek.nn.currencyaccount.repository;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import net.hubek.nn.currencyaccount.CurrencyCode;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 import static net.hubek.nn.currencyaccount.CurrencyCode.PLN;
@@ -25,6 +29,14 @@ public class AccountEntity {
     @Column(columnDefinition = "TEXT")
     @Convert(converter = AccountBalancesConverter.class)
     private Map<CurrencyCode, BigDecimal> balances;
+
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
+    private ZonedDateTime createdAt;
+
+    @Column(nullable = false)
+    @UpdateTimestamp
+    private ZonedDateTime updatedAt;
 
     public AccountEntity() {
     }

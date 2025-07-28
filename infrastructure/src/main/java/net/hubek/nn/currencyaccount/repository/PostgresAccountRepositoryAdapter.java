@@ -1,6 +1,8 @@
-package net.hubek.nn.currencyaccount;
+package net.hubek.nn.currencyaccount.repository;
 
 import lombok.RequiredArgsConstructor;
+import net.hubek.nn.currencyaccount.Account;
+import net.hubek.nn.currencyaccount.AccountRepository;
 
 import java.util.Optional;
 
