@@ -23,7 +23,8 @@ public class AccountController {
     public ResponseEntity<AccountResponse> createAccount(@RequestHeader("Idempotency-Key") String idempotencyKey, @RequestBody CreateAccountRequest accountRequest) {
 //        if (idempotencyKeyStore.contains(idempotencyKey)) {
 //            // obsluga idempotencyjnosci, najlepiej jakims aspectem
-//            // return
+//            // niepotrzebne gdybysmy mieli unikalne pole, np. pesel
+//            // return poprzedni response
 //        }
 
         AccountResponse accountResponse = toAccountResponse(accountCreationUseCase.createAccount(accountRequest.firstName(), accountRequest.lastName(), accountRequest.plnBalance()));
@@ -39,7 +40,7 @@ public class AccountController {
     public ResponseEntity<Void> exchange(@RequestHeader("Idempotency-Key") String idempotencyKey, @PathVariable String id, @RequestBody ExchangeCurrencyRequest exchangeRequest) {
 //        if (idempotencyKeyStore.contains(idempotencyKey)) {
 //            // obsluga idempotencyjnosci, najlepiej jakims aspectem
-//            // return
+//            // return poprzedni response
 //        }
         exchangeCurrencyUseCase.exchange(id, exchangeRequest.amount(), exchangeRequest.fromCurrency(), exchangeRequest.toCurrency());
         return ResponseEntity.ok().build();
