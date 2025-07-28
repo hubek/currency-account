@@ -26,6 +26,11 @@ mvn clean package
 ```shell script
 java -jar application/target/application.jar
 ```
+## Użycie aplikacij poprzez Swagger
+
+```shell script
+http://localhost:8080/swagger-ui/index.html
+```
 
 ## Przykładowe wywołania API
 
@@ -71,6 +76,7 @@ To miałoby zasadniczy wpływ na operację wymiany, ponieważ taka operacja koni
 ## Co można by poprawić
 - testy integracyjne dla API z użyciem PostgreSQL w Testcontainers 
 - testy integracyjne warstwy reposytoriów z @DataJpaTest
+- obsługa idempotency-key przynajmniej dla endpointa /exchange
 
 W razie jakichkolwiek pytań czy chęci dyskusji jestem otwarty na rozmowę, pozdrawiam!
 
