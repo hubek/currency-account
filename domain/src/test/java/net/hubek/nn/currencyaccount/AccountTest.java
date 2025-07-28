@@ -1,7 +1,7 @@
 package net.hubek.nn.currencyaccount;
 
-import net.hubek.nn.currencyaccount.exception.AccountCreationException;
-import net.hubek.nn.currencyaccount.exception.CurrencyExchangeException;
+import net.hubek.nn.currencyaccount.exception.AccountCreationValidationException;
+import net.hubek.nn.currencyaccount.exception.CurrencyExchangeValidationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -38,8 +38,8 @@ class AccountTest {
         BigDecimal exchangeRate = new BigDecimal("1.50");
 
         // when // then
-        CurrencyExchangeException ex = assertThrows(
-                CurrencyExchangeException.class,
+        CurrencyExchangeValidationException ex = assertThrows(
+                CurrencyExchangeValidationException.class,
                 () -> account.exchange(amount, PLN, USD, exchangeRate)
         );
         assertTrue(ex.getMessage().contains("Insufficient balance"));
@@ -53,8 +53,8 @@ class AccountTest {
         BigDecimal exchangeRate = new BigDecimal("1.00");
 
         // when // then
-        CurrencyExchangeException ex = assertThrows(
-                CurrencyExchangeException.class,
+        CurrencyExchangeValidationException ex = assertThrows(
+                CurrencyExchangeValidationException.class,
                 () -> account.exchange(amount, PLN, PLN, exchangeRate)
         );
         assertTrue(ex.getMessage().contains("Cannot exchange to the same currency"));
@@ -70,8 +70,8 @@ class AccountTest {
         BigDecimal amount = new BigDecimal("10.00");
         BigDecimal exchangeRate = new BigDecimal("1.00");
 
-        CurrencyExchangeException ex = assertThrows(
-                CurrencyExchangeException.class,
+        CurrencyExchangeValidationException ex = assertThrows(
+                CurrencyExchangeValidationException.class,
                 () -> account.exchange(amount, from, to, exchangeRate)
         );
         assertTrue(ex.getMessage().contains("Exchange is not possible for account"));
@@ -80,7 +80,7 @@ class AccountTest {
     @Test
     void shouldThrowExceptionWhenNegativeInitialBalance() {
         assertThrows(
-                AccountCreationException.class,
+                AccountCreationValidationException.class,
                 () -> new Account("4", "Kasia", "Wiśniewska", new BigDecimal("-1.00"), new BigDecimal("10.00"))
         );
     }
@@ -88,11 +88,11 @@ class AccountTest {
     @Test
     void shouldThrowExceptionWhenBlankUserData() {
         assertThrows(
-                AccountCreationException.class,
+                AccountCreationValidationException.class,
                 () -> new Account("4", "", "Wiśniewska", new BigDecimal("1.00"), new BigDecimal("10.00"))
         );
         assertThrows(
-                AccountCreationException.class,
+                AccountCreationValidationException.class,
                 () -> new Account("4", "Kasia", "", new BigDecimal("1.00"), new BigDecimal("10.00"))
         );
     }

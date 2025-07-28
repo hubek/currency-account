@@ -2,8 +2,8 @@ package net.hubek.nn.currencyaccount;
 
 import lombok.NonNull;
 import lombok.Value;
-import net.hubek.nn.currencyaccount.exception.AccountCreationException;
-import net.hubek.nn.currencyaccount.exception.CurrencyExchangeException;
+import net.hubek.nn.currencyaccount.exception.AccountCreationValidationException;
+import net.hubek.nn.currencyaccount.exception.CurrencyExchangeValidationException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -52,28 +52,28 @@ public class Account {
 
     private void validateNotNegativeAmount(BigDecimal amount, CurrencyCode currencyCode) {
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
-            throw new AccountCreationException("Amount cannot be negative, currency: " + currencyCode + "account: " + this.id);
+            throw new AccountCreationValidationException("Amount cannot be negative, currency: " + currencyCode + "account: " + this.id);
         }
     }
 
     private void validateUserData(String firstName, String lastName) {
         if (firstName.isBlank() || lastName.isBlank()) {
-            throw new AccountCreationException("First name and last name cannot be blank, account: " + this.id);
+            throw new AccountCreationValidationException("First name and last name cannot be blank, account: " + this.id);
         }
     }
 
     private void validateCorrectCurrencyCodes(CurrencyCode fromCurrency, CurrencyCode toCurrency) {
         if (fromCurrency.equals(toCurrency)) {
-            throw new CurrencyExchangeException("Cannot exchange to the same currency: " + fromCurrency + "account: " + this.id);
+            throw new CurrencyExchangeValidationException("Cannot exchange to the same currency: " + fromCurrency + "account: " + this.id);
         }
         if (!balances.containsKey(fromCurrency) || !balances.containsKey(toCurrency)) {
-            throw new CurrencyExchangeException("Exchange is not possible for account " + this.id + ", currencies: " + fromCurrency + ", " + toCurrency);
+            throw new CurrencyExchangeValidationException("Exchange is not possible for account " + this.id + ", currencies: " + fromCurrency + ", " + toCurrency);
         }
     }
 
     private void validateSufficientBalance(BigDecimal balance, BigDecimal amount) {
         if (balance.compareTo(amount) < 0) {
-            throw new CurrencyExchangeException("Insufficient balance for exchange, account: " + this.id);
+            throw new CurrencyExchangeValidationException("Insufficient balance for exchange, account: " + this.id);
         }
     }
 

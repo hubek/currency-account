@@ -2,9 +2,9 @@ package net.hubek.nn.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import net.hubek.nn.controller.response.ErrorResponse;
-import net.hubek.nn.currencyaccount.exception.AccountCreationException;
+import net.hubek.nn.currencyaccount.exception.AccountCreationValidationException;
 import net.hubek.nn.currencyaccount.exception.AccountNotFoundException;
-import net.hubek.nn.currencyaccount.exception.CurrencyExchangeException;
+import net.hubek.nn.currencyaccount.exception.CurrencyExchangeValidationException;
 import net.hubek.nn.currencyaccount.exchangerate.ExchangeRateProviderException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({
-            CurrencyExchangeException.class,
-            AccountCreationException.class
+            CurrencyExchangeValidationException.class,
+            AccountCreationValidationException.class
     })
     public ResponseEntity<ErrorResponse> handle400Exception(Exception ex) {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
@@ -31,8 +31,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({ExchangeRateProviderException.class})
-    public ResponseEntity<ErrorResponse> handle500Exception(Exception ex) {
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ErrorResponse> handle503Exception(Exception ex) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.SERVICE_UNAVAILABLE);
     }
 }
