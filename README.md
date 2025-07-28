@@ -26,7 +26,7 @@ mvn clean package
 ```shell script
 java -jar application/target/application.jar
 ```
-## Użycie aplikacij poprzez Swagger
+## Użycie aplikacji poprzez Swagger
 
 ```shell script
 http://localhost:8080/swagger-ui/index.html
