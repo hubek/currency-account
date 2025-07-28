@@ -38,6 +38,9 @@ public class AccountEntity {
     @UpdateTimestamp
     private ZonedDateTime updatedAt;
 
+    @Version
+    private Long version;
+
     public AccountEntity() {
     }
 

@@ -16,8 +16,8 @@ import static net.hubek.nn.currencyaccount.AccountMapper.toAccountResponse;
 @RequiredArgsConstructor
 public class AccountController {
 
-    private final AccountCreationUseCase accountCreationService;
-    private final ExchangeCurrencyUseCase exchangeCurrencyService;
+    private final AccountCreationUseCase accountCreationUseCase;
+    private final ExchangeCurrencyUseCase exchangeCurrencyUseCase;
 
     @PostMapping
     public ResponseEntity<AccountResponse> createAccount(@RequestHeader("Idempotency-Key") String idempotencyKey, @RequestBody CreateAccountRequest accountRequest) {
@@ -26,13 +26,13 @@ public class AccountController {
 //            // return
 //        }
 
-        AccountResponse accountResponse = toAccountResponse(accountCreationService.createAccount(accountRequest.firstName(), accountRequest.lastName(), accountRequest.plnBalance()));
+        AccountResponse accountResponse = toAccountResponse(accountCreationUseCase.createAccount(accountRequest.firstName(), accountRequest.lastName(), accountRequest.plnBalance()));
         return ResponseEntity.ok(accountResponse);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AccountResponse> getAccount(@PathVariable String id) {
-        return ResponseEntity.ok(toAccountResponse(accountCreationService.getAccount(id)));
+        return ResponseEntity.ok(toAccountResponse(accountCreationUseCase.getAccount(id)));
     }
 
     @PostMapping("/{id}/exchange")
@@ -41,7 +41,7 @@ public class AccountController {
 //            // obsluga idempotencyjnosci, najlepiej jakims aspectem
 //            // return
 //        }
-        exchangeCurrencyService.exchange(id, exchangeRequest.amount(), exchangeRequest.fromCurrency(), exchangeRequest.toCurrency());
+        exchangeCurrencyUseCase.exchange(id, exchangeRequest.amount(), exchangeRequest.fromCurrency(), exchangeRequest.toCurrency());
         return ResponseEntity.ok().build();
     }
 
